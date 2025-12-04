@@ -15,6 +15,9 @@ interface RootLayoutProps {
   children: ReactNode;
 }
 
+// Moved outside component to satisfy exhaustive-deps
+const easeInOutCubic = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
 export default function RootLayout({ children }: RootLayoutProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -22,8 +25,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
   const [activeSection, setActiveSection] = useState<string>('home');
   const [activeLinkClicked, setActiveLinkClicked] = useState<string | null>(null);
   const [isScrollingProgrammatically, setIsScrollingProgrammatically] = useState(false);
-
-  const easeInOutCubic = (t: number) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
   const handleSmoothScroll = useCallback(async (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
     e.preventDefault();
@@ -79,7 +80,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         }
       }, 100);
     }
-  }, [easeInOutCubic, headerRef, pathname, router]);
+  }, [headerRef, pathname, router]);
 
   useEffect(() => {
     const observerOptions: IntersectionObserverInit = {
@@ -257,9 +258,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <footer className="bg-gradient-to-r from-gray-900 via-black to-gray-900">
             <div className="container mx-auto flex flex-col md:flex-row justify-between items-center py-4 px-6 space-y-6 md:space-y-0">
 
-              {/* Left Section - Text Color Changed to bright, readable gray, added shadow */}
+              {/* Left Section */}
               <div className="text-center md:text-left order-1 md:order-1">
-                {/* Applied Gradient to text */}
                 <p className="text-transparent bg-clip-text bg-gradient-to-r from-teal-200 to-cyan-400 text-sm leading-loose drop-shadow-sm">
                   Built by{" "}
                   <span className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-indigo-500">Nardos Tilahun</span>.
@@ -276,7 +276,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                 </p>
               </div>
 
-              {/* Center Section - Social Links - Icons' colors changed to vibrant defaults and matching hovers */}
+              {/* Center Section - Social Links */}
               <div className="flex items-center justify-center space-x-4 order-3 md:order-3">
                 <a
                   href="https://linkedin.com/in/nardos-tilahun-74260213a"
@@ -328,12 +328,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
                 </a>
               </div>
 
-              {/* Copyright Section - Applied Gradient to text */}
+              {/* Copyright Section */}
               <div className="flex items-center justify-center order-2 md:order-2">
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-lime-300 via-emerald-300 to-green-400 py-3 drop-shadow-sm">© {new Date().getFullYear()} All rights reserved.</span>
               </div>
 
-              {/* Right Section - Applied Gradient to text */}
+              {/* Right Section */}
               <div className="text-center md:text-right order-4 md:order-4">
                 <p className="text-transparent bg-clip-text bg-gradient-to-r from-teal-200 to-cyan-400 text-sm leading-loose drop-shadow-sm">
                   Source code available on{" "}
