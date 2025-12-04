@@ -5,8 +5,8 @@ export interface ProjectTechnology {
   category: "frontend" | "backend" | "database" | "devops" | "other";
 }
 
-interface ProjectImage {
-  url: string; // Or cloudinaryId
+export interface ProjectImage {
+  url: string;
   alt: string;
   caption?: string;
 }
@@ -14,19 +14,73 @@ interface ProjectImage {
 export interface Project {
   id: string;
   title: string;
-  description: string; // Short description for showcase card
+  description: string;
   type: string;
-  content: string; // Long description for modal/detail page
-  imageUrl: string; // Cloudinary ID for main image
+  content: string;
+  imageUrl: string;
   features: string[];
   technologies: ProjectTechnology[];
-  images: ProjectImage[]; // Optional, if you have other images not tied to screenshots
-  challenges: string[]; // Explicitly include for ProjectModal
-  solutions: string[]; // Explicitly include for ProjectModal
-  learnings: string[]; // Explicitly include for ProjectModal
+  images: ProjectImage[];
+  challenges: string[];
+  solutions: string[];
+  learnings: string[];
 }
 
 export const projects: Project[] = [
+  {
+    id: "goal-cracker",
+    title: "Goal Cracker - Recursive AI Strategy Engine",
+    description: "A strategic planning engine that fractures ambiguous goals into atomic, actionable blueprints. Features infinite recursive drill-downs and non-hallucinating structured outputs.",
+    type: "Full Stack AI Application",
+    content:
+      "Goal Cracker is not just another chatbot; it is a Strategic AI Planning Engine designed to cure the paralysis of big ambitions. Unlike standard LLMs that offer vague, hallucinated advice, Goal Cracker enforces strict JSON-structured reasoning to fracture complex goals into 5 specific, actionable steps. Users can 'drill down' infinitely into any step, creating a deep recursive tree of tasks using a fractal planning approach. With a visual Mind Map for navigation, exportable blueprints, and a multi-agent 'War Room' (switching between Llama 3.3 and Mixtral), it allows users to audit their strategy from the macro vision down to the micro execution, ensuring they always know exactly where they stand in relation to their actual goal.",
+    imageUrl: "goal_cracker_landing", // Main landing page image
+    features: [
+      "Infinite Recursive Drill-Down (Fractal Planning)",
+      "Multi-Agent 'War Room' (Hot-swap Llama 3.3/Mixtral)",
+      "Interactive Mind Map with Zoom, Pan, & Filters",
+      "Visual Complexity Mapping & Difficulty Charts",
+      "Real-Time Streaming with Hybrid JSON/Text Parsing",
+      "Non-Hallucinating Structured Output Enforcement",
+      "Branching Timelines (Version Control for Ideas)",
+      "Secure Authentication (Google/Email via Better Auth)",
+      "Visual Data Export (SVG, PNG, PDF, JSON, Markdown)",
+      "Dynamic Slogans & Featured Examples Engine",
+    ],
+    technologies: [
+      { name: "Next.js 16", category: "frontend" },
+      { name: "TypeScript", category: "frontend" },
+      { name: "FastAPI (Python)", category: "backend" },
+      { name: "PostgreSQL", category: "database" },
+      { name: "Docker", category: "devops" },
+      { name: "Groq API", category: "other" },
+      { name: "Tailwind CSS v4", category: "frontend" },
+      { name: "Framer Motion", category: "frontend" },
+      { name: "Better Auth", category: "backend" },
+      { name: "SQLAlchemy", category: "backend" },
+      { name: "Recharts", category: "frontend" },
+      { name: "Zustand", category: "frontend" }
+    ],
+    images: [],
+    challenges: [
+      "Orchestrating a robust streaming architecture that handles raw text and structured JSON simultaneously to prevent UI freezing.",
+      "Managing infinite recursive branching where every 'step' can become a new parent 'goal', requiring a complex tree-based database schema.",
+      "Ensuring seamless synchronization between a modern Next.js 16 frontend and a Python FastAPI backend using Docker containers.",
+      "Preventing LLM hallucination by enforcing strict output protocols while maintaining a natural conversational flow."
+    ],
+    solutions: [
+      "Implemented a fault-tolerant stream parser using `best-effort-json-parser` to render UI components (Charts/Logs) progressively as packets arrive.",
+      "Designed a recursive data structure in PostgreSQL and a React context-based Mind Map navigator to handle infinite depth traversal.",
+      "Utilized Docker Compose for local development consistency and established a clean REST API contract for Client-Server communication.",
+      "Engineered a 'System Prompt' architecture that rejects chit-chat and enforces a specific JSON schema, backed by a Pydantic validation layer."
+    ],
+    learnings: [
+      "Mastered the integration of Python (FastAPI) with Node.js (Next.js) in a microservices-like architecture.",
+      "Deepened knowledge of LLM streaming protocols, Server-Sent Events (SSE), and handling non-deterministic outputs.",
+      "Gained advanced experience in building interactive data visualizations (Mind Maps) and state management for recursive data.",
+      "Refined skills in modern authentication flows using Better Auth and securing API routes against abuse."
+    ],
+  },
   {
     id: "personal-loan-management",
     title: "Personal Financial Loan Management System",
@@ -34,7 +88,7 @@ export const projects: Project[] = [
     type: "Full Stack Web Application",
     content:
       "This full-stack web application enables secure loan management for both administrators and customers. Administrators can manage users, loans, and payments, while customers can track their loan statuses and payment history. The application streamlines the entire lending process with features like authentication, payment tracking, email notifications, and detailed analytics. The system is designed with role-based access to provide different views and capabilities depending on user permissions.",
-    imageUrl: "dashboard1234", 
+    imageUrl: "dashboard1234",
     features: [
       "User authentication with role-based access control",
       "Comprehensive loan application management",

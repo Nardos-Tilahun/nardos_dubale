@@ -13,6 +13,29 @@ interface ProjectImprovements {
 }
 
 const allImprovements: ProjectImprovements = {
+  'goal-cracker': [
+    {
+      title: 'Real-Time Team Collaboration',
+      description: 'Allow multiple users to enter the same "War Room" via WebSockets to edit plans, chat with agents, and vote on strategies together in real-time.',
+      benefits: 'Enables remote teams and co-founders to brainstorm strategies collaboratively without version conflict.',
+      technologies: 'Socket.io, Redis, Yjs (CRDTs)',
+      iconClass: 'bg-blue-500'
+    },
+    {
+      title: 'Calendar & Task Integration',
+      description: 'One-click export of the generated 5-step plan directly to Google Calendar, Notion, or Jira with automatically calculated deadlines based on difficulty.',
+      benefits: 'Reduces the friction between planning and actual execution by putting tasks where users work.',
+      technologies: 'Google Calendar API, Notion API, OAuth',
+      iconClass: 'bg-green-500'
+    },
+    {
+      title: 'Voice Mode & Dictation',
+      description: 'Implement speech-to-text (Whisper) and text-to-speech to allow users to brainstorm complex goals while walking or driving, converting rambles into structured JSON.',
+      benefits: 'Increases accessibility and allows for on-the-go usage where typing is not feasible.',
+      technologies: 'OpenAI Whisper, Web Speech API',
+      iconClass: 'bg-purple-500'
+    }
+  ],
   'personal-loan-management': [
     {
       title: 'Online Payment Integration',

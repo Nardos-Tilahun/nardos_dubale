@@ -14,6 +14,43 @@ interface ProjectScreenshots {
 }
 
 const allScreenshots: ProjectScreenshots = {
+   'goal-cracker': [
+    {
+      cloudinaryId: "goal_cracker_landing",
+      title: "Landing & Dynamic Slogans",
+      description: "The entry point featuring dynamic, rotating slogans and featured examples to spark user ideation.",
+      detailedDescription: "The landing page serves as a 'Zero State' that inspires action. It features a minimalist, centered input field surrounded by a unique, dynamically generated slogan (e.g., 'Action Over Anxiety', 'Baker - Rise to the occasion') that changes on every visit. This sets the tone for the app as a creative yet structured strategic tool.",
+      category: "Landing"
+    },
+    {
+      cloudinaryId: "goal_cracker_dashboard",
+      title: "Strategy Dashboard & Breakdown",
+      description: "The main interface showing the active plan, complexity chart, and chat stream.",
+      detailedDescription: "The dashboard features a split view. On the top, breadcrumbs track the user's depth in the plan. Below, the main chat stream displays the AI's structured output: a breakdown of 5 actionable steps, each rated by difficulty. A visual bar chart (Complexity Map) immediately renders this data, allowing users to identify bottlenecks at a glance.",
+      category: "Dashboard"
+    },
+    {
+      cloudinaryId: "goal_cracker_mindmap",
+      title: "Mind Map Navigator",
+      description: "A fullscreen recursive tree visualization of the strategy branches.",
+      detailedDescription: "This interactive Mind Map visualizes the entire conversation history as a tree. Users can pan, zoom, and click nodes to jump to specific steps. It includes advanced controls for filtering nodes by complexity (High/Medium/Low), expanding/collapsing levels, and exporting the entire strategy map as SVG, PNG, or PDF for external use.",
+      category: "Visualization"
+    },
+    {
+      cloudinaryId: "goal_cracker_auth",
+      title: "Secure Authentication",
+      description: "Better Auth integration supporting Google OAuth and Email/Password flows.",
+      detailedDescription: "A robust authentication modal powered by Better Auth. It supports social login via Google and a full Email/Password flow, including registration, email verification, and a 'Forgot Password' reset loop. This ensures user plans are securely persisted and accessible across sessions.",
+      category: "Auth"
+    },
+    {
+      cloudinaryId: "goal_cracker_thinking",
+      title: "Transparent AI Reasoning",
+      description: "Expandable logs showing the AI's internal monologue and decision process.",
+      detailedDescription: "To differentiate from 'black box' AI, Goal Cracker exposes the raw 'Thinking' process in an expandable accordion. This builds trust by letting users see exactly how the AI analyzed the request, checked constraints, and formulated the strategy before generating the final JSON plan.",
+      category: "AI Features"
+    }
+  ],
   'personal-loan-management': [
       // Admin Role Pages
       {
@@ -94,69 +131,70 @@ const allScreenshots: ProjectScreenshots = {
   ],
   'shipment-tracking-system': [
     {
-      cloudinaryId: "shipment_dashboard_main", // <<-- IMPORTANT: Replace with your Cloudinary ID
+      cloudinaryId: "shipment_dashboard_main",
       title: "Dashboard Overview",
       description: "Central dashboard with key statistics, monthly trends, and distribution charts for shipments.",
       detailedDescription: "The main dashboard provides a comprehensive overview of logistics operations. It displays total shipments, pending payments, completed, and in-transit shipment counts. Interactive charts visualize monthly shipment trends, status distribution (e.g., Draft, In-Transit, Released), shipment type (Import vs. Export), and breakdown by office code, container size, payment status, and tax refund status. Recent shipments are listed in a table with quick links to details.",
       category: "Dashboard"
     },
     {
-      cloudinaryId: "shipment_list_table", // <<-- IMPORTANT: Replace with your Cloudinary ID
+      cloudinaryId: "shipment_list_table",
       title: "Shipment List (Table View)",
       description: "Manage all shipments in a paginated, sortable, and filterable table.",
       detailedDescription: "The Shipments page presents all recorded shipments in a responsive data table. Users can search by company name, registration number, or contact person. Filters are available for status, type, and office code. The table supports sorting by various columns (ID, Registration, Company, Date, etc.) and pagination. Each row provides quick action buttons for viewing details, editing, or deleting a shipment.",
       category: "Shipments"
     },
     {
-      cloudinaryId: "shipment_list_grid", // <<-- IMPORTANT: Replace with your Cloudinary ID
+      cloudinaryId: "shipment_list_grid",
       title: "Shipment List (Grid View)",
       description: "Alternative card-based view for quick overview of shipments.",
       detailedDescription: "In addition to the table, the Shipments page offers a grid view, displaying each shipment as a card. This view provides a concise overview of key information like registration number, company name, type, status, office, and payment status at a glance. Action buttons for details, edit, and delete are available on each card, making it suitable for quick browsing.",
       category: "Shipments"
     },
     {
-      cloudinaryId: "shipment_details", // <<-- IMPORTANT: Replace with your Cloudinary ID
+      cloudinaryId: "shipment_details",
       title: "Shipment Details Page",
       description: "Detailed view of a specific shipment with all relevant information and actions.",
       detailedDescription: "This page provides an exhaustive breakdown of a single shipment. It includes general shipment information (type, date, office, container), company and contact details, processing information (followed by, assessor, agent), and a full timeline of events (transit received, loading, departure, arrival). Status badges for shipment, payment, and tax refund are prominently displayed. Edit and delete actions are available for authorized users.",
       category: "Shipments"
     },
     {
-      cloudinaryId: "shipment_form_basic", // <<-- IMPORTANT: Replace with your Cloudinary ID
+      cloudinaryId: "shipment_form_basic",
       title: "Shipment Form (Basic Tab)",
       description: "Multi-tabbed form for creating/editing shipments, starting with basic information.",
       detailedDescription: "The shipment form is structured into three tabs: 'Basic Information', 'Details & Contacts', and 'Timeline & Notes'. The 'Basic Information' tab collects essential data such as shipment status, type, date, office code, registration number, container size, payment status, and tax refund status. It includes real-time validation and a 'Next' button to proceed.",
       category: "Forms"
     },
     {
-      cloudinaryId: "shipment_form_details", // <<-- IMPORTANT: Replace with your Cloudinary ID
+      cloudinaryId: "shipment_form_details",
       title: "Shipment Form (Details Tab)",
       description: "Second tab of the shipment form for company and contact details.",
       detailedDescription: "The 'Details & Contacts' tab of the shipment form is where users input information about the company associated with the shipment, the primary contact person, their phone number, and internal processing details like 'Followed By', 'Assessor Name', and 'Djibouti Agent'. This tab also features client-side validation to ensure all required fields are completed before moving forward.",
       category: "Forms"
     },
     {
-      cloudinaryId: "user_login", // <<-- IMPORTANT: Replace with your Cloudinary ID
+      cloudinaryId: "user_login",
       title: "User Login Page",
       description: "Secure login interface for accessing the Shipment Tracking System.",
       detailedDescription: "The login page provides a secure entry point for users. It features fields for email and password, with an option to toggle password visibility. Error messages are displayed for incorrect credentials or failed login attempts. It uses JWT authentication to establish user sessions and supports redirection after successful login.",
       category: "Auth"
     },
     {
-      cloudinaryId: "admin_users_list", // <<-- IMPORTANT: Replace with your Cloudinary ID
+      cloudinaryId: "admin_users_list",
       title: "Admin User List",
       description: "Administrator view for managing all system users.",
       detailedDescription: "Accessible only to administrators, this page lists all registered users in a table. It provides actions to add new users, edit existing user details, or delete users. The list displays user ID, email, name, role, and creation/update timestamps. This interface is crucial for maintaining user accounts and managing access control within the system.",
       category: "Admin"
     },
     {
-      cloudinaryId: "admin_user_new", // <<-- IMPORTANT: Replace with your Cloudinary ID
+      cloudinaryId: "admin_user_new",
       title: "Admin Add/Edit User Form",
       description: "Form for administrators to create new users or modify existing user details.",
       detailedDescription: "This form allows administrators to manage user accounts. For new users, it includes fields for email, name, password, and role. For editing, it pre-populates existing data, allowing updates to email, name, password (optional), and role. It incorporates client-side validation and securely handles password hashing and role assignments.",
       category: "Admin"
     },
   ],
+  
 };
 
 export const getScreenshotsByProjectId = (projectId: string): Screenshot[] => {

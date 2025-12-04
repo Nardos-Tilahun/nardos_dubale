@@ -264,7 +264,96 @@ export const personalData = {
       },
       "role": "Full Stack Developer (Lead)",
       "outcome": "Successfully built and deployed a scalable logistics tracking system. This project significantly enhanced Nardos's expertise in Next.js, PostgreSQL, Prisma, and the practical application of AI through Agents and MCP server, delivering a solution that provides real-time insights and operational efficiency."
-    }
+    },
+   {
+      "name": "Goal Cracker - Recursive AI Strategy Engine",
+      "description": "A strategic planning engine that fractures ambiguous goals into atomic, actionable blueprints using fractal planning and multi-agent reasoning.",
+      "longDescription": "Goal Cracker is an autonomous Strategic Engine designed to cure the paralysis of big ambitions. Unlike standard LLMs that offer vague advice, it enforces strict JSON-structured reasoning to fracture complex goals into specific, actionable steps. Users can 'drill down' infinitely into any step, creating a deep recursive tree of tasks using a fractal planning approach. It features a multi-agent 'War Room' where users can switch between Llama 3.3 and Mixtral models to cross-examine strategies, ensuring robust planning without hallucination.",
+      "technologies": [
+        "Next.js 16", "TypeScript", "FastAPI (Python)", "PostgreSQL", "Docker", "Groq API",
+        "Tailwind CSS v4", "Framer Motion", "Better Auth", "SQLAlchemy", "Recharts", "Zustand"
+      ],
+      "keyFeatures": [
+        "Infinite Recursive Drill-Down (Fractal Planning)",
+        "Multi-Agent 'War Room' (Hot-swap Llama 3.3/Mixtral)",
+        "Interactive Mind Map Navigation & Tree Visualization",
+        "Visual Complexity Mapping & Difficulty Charts",
+        "Real-Time Streaming with Hybrid JSON/Text Parsing",
+        "Non-Hallucinating Structured Output Enforcement",
+        "Branching Timelines (Version Control for Ideas)",
+        "Secure Authentication via Better Auth",
+        "Visual Data Export (SVG, PNG, PDF, JSON, Markdown)",
+        "Dynamic Slogans & Featured Examples Engine"
+      ],
+      "architecture": {
+        "overview": "A sophisticated decoupled architecture designed for high-concurrency AI streaming. The frontend handles complex recursive state, while the backend orchestrates AI logic.",
+        "frontend": {
+          "description": "Next.js 16 application using Server Components for initial load and extensive client-side state (Zustand/Context) to manage the recursive Mind Map tree.",
+          "technologies": ["Next.js 16", "TypeScript", "Tailwind v4", "Framer Motion", "Recharts", "React Flow"],
+          "components": ["Chat Stream Parser", "Recursive Mind Map", "Complexity Visualizer", "Better Auth Client"]
+        },
+        "backend": {
+          "description": "FastAPI service acting as the 'Cortex', managing connections to Groq, enforcing strict JSON schemas via Pydantic, and handling rate limits.",
+          "technologies": ["FastAPI", "Python 3.11", "SlowAPI", "Pydantic", "HTTPX"],
+          "components": ["AI Orchestrator", "Stream Generator", "Rate Limiter", "Recursive Data CRUD"]
+        },
+        "dataLayer": {
+          "description": "PostgreSQL database with a recursive schema optimized for hierarchical conversation data, supporting infinite branching depths via parent-child relationships.",
+          "technologies": ["PostgreSQL", "SQLAlchemy", "AsyncPG", "Alembic"],
+          "components": ["User/Session Tables", "Recursive Goal/Turn Nodes", "JSONB Strategy Storage"]
+        }
+      },
+      "systemInteractions": {
+        "streamingPipeline": "Backend yields raw text chunks via Server-Sent Events logic; Frontend accumulator parses partial JSON tokens in real-time to render UI components before the full response is complete.",
+        "fractalBranching": "Editing a message or drilling down creates a new 'Turn Version' or 'Child Node', forking the conversation history tree without data loss.",
+        "modelHotSwapping": "The Controller logic allows users to switch the active LLM provider (Groq Llama/Mixtral) for any specific turn to compare reasoning styles.",
+        "authSync": "Better Auth handles session tokens, syncing user state seamlessly between the Next.js middleware and FastAPI dependency injection."
+      },
+      "challenges": [
+        {
+          "title": "Streaming Mixed Content (JSON + Text)",
+          "description": "The AI agents needed to provide a conversational response AND a structured plan simultaneously. Waiting for the full response made the UI feel slow, but standard JSON parsers crash on incomplete strings.",
+          "solution": "Implemented a fault-tolerant streaming hook on the frontend using `best-effort-json-parser`. This allows the UI to render valid parts of the JSON (like 'Thinking' logs) progressively as they arrive."
+        },
+        {
+          "title": "Infinite Branching History",
+          "description": "Managing a complex tree of alternate timelines where users can edit any previous message or 'drill down' into a specific step was difficult to map in a linear SQL database.",
+          "solution": "Designed a recursive 'ChatTurn' schema in PostgreSQL where every message links to a parent ID. Built a recursive Mind Map navigation system on the frontend to rebuild the visual tree structure."
+        },
+        {
+          "title": "Preventing Hallucination",
+          "description": "General purpose LLMs often drift into conversational fluff when asked for strict plans, breaking the application's rigid data structure requirements.",
+          "solution": "Engineered a robust 'System Prompt' layer that strictly enforces a specific JSON output schema, backed by a Pydantic validation layer on the backend that sanitizes inputs and outputs."
+        }
+      ],
+      "futureImprovements": [
+        {
+          "feature": "Real-Time Team Collaboration",
+          "description": "Allow multiple users to enter the same 'War Room' via WebSockets to edit plans and chat with agents together.",
+          "benefits": ["Remote brainstorming", "Version conflict resolution", "Team strategy alignment"],
+          "technologies": ["Socket.io", "Redis", "Yjs"]
+        },
+        {
+          "feature": "Calendar & Task Integration",
+          "description": "One-click export of the generated 5-step plan directly to Google Calendar or Notion with deadlines.",
+          "benefits": ["Reduced friction", "Automated scheduling", "Direct execution path"],
+          "technologies": ["Google Calendar API", "Notion API", "OAuth"]
+        },
+        {
+          "feature": "Voice Mode & Dictation",
+          "description": "Implement speech-to-text (Whisper) to allow users to brainstorm complex goals while walking or driving.",
+          "benefits": ["Accessibility", "On-the-go usage", "Natural interaction"],
+          "technologies": ["OpenAI Whisper", "Web Speech API"]
+        }
+      ],
+      "links": {
+        "github": "https://github.com/Nardos-Tilahun/mind-cracker", 
+        "demoVideo": "#", 
+        "liveSite": "https://mind-cracker.vercel.app" 
+      },
+      "role": "Sole Architect & Developer",
+      "outcome": "Created a tool that outperforms standard chatbots in planning accuracy by enforcing strict JSON structures and offering visual branching."
+    },
   ],
   "contact": {
     "email": "contactnardos@gmail.com",

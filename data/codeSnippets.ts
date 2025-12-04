@@ -11,6 +11,119 @@ export interface CodeSnippet {
 }
 
 const allSnippets: CodeSnippet[] = [
+      {
+    id: 'fastapi-stream',
+    title: 'FastAPI AI Stream Generator',
+    description: 'Python generator that handles streaming from Groq API, manages model fallback chains, and handles error states for the frontend.',
+    language: 'python',
+    category: 'AI Integration',
+    projectId: 'goal-cracker',
+    code: `async def stream_chat(self, messages: List[ChatMessage], model: str) -> AsyncGenerator[bytes, None]:
+    # 1. Convert Pydantic models to dicts safely
+    valid_msgs = [m.model_dump() for m in messages if m.content.strip()]
+
+    # 2. Smart Model Fallback logic
+    target_model = model if "llama" in model or "mixtral" in model else "llama-3.3-70b-versatile"
+    
+    # Chain: Target -> Mixtral -> Llama 8B (Speed Fallback)
+    model_chain = [target_model, "mixtral-8x7b-32768", "llama-3.1-8b-instant"]
+
+    for attempt_model in model_chain:
+        try:
+            async with self.client.stream(
+                "POST", 
+                "https://api.groq.com/openai/v1/chat/completions", 
+                headers=self._get_headers(), 
+                json={
+                    "model": attempt_model,
+                    "messages": [{"role": "system", "content": SYSTEM_PROMPT}] + valid_msgs,
+                    "stream": True,
+                    "response_format": {"type": "json_object"} # Force JSON
+                }
+            ) as response:
+                if response.status_code == 200:
+                    async for line in response.aiter_lines():
+                        if line.startswith("data: "):
+                            data_str = line.replace("data: ", "").strip()
+                            if data_str == "[DONE]": break
+                            
+                            # Parse chunk and yield content to frontend
+                            data_json = json.loads(data_str)
+                            content = data_json['choices'][0]['delta'].get('content', '')
+                            if content:
+                                yield content.encode("utf-8")
+                    return # Success
+
+        except Exception as e:
+            print(f"🔥 Model {attempt_model} failed: {str(e)}")
+            continue
+
+    yield b'{"error": "Service busy. All agents overloaded."}'`
+  },
+  {
+    id: 'mind-map-node',
+    title: 'Recursive Mind Map Component',
+    description: 'React component that renders the branching strategy tree recursively with animations and complexity filtering.',
+    language: 'tsx',
+    category: 'Frontend UI',
+    projectId: 'goal-cracker',
+    code: `export function MindMapNode({ node, depth, onNavigate }: MindMapNodeProps) {
+    const { expandedNodes, toggleNode } = useMindMapContext();
+    const isExpanded = expandedNodes.has(node.id);
+    const hasChildren = node.children && node.children.length > 0;
+    const complexityColor = getComplexityColor(node.complexity);
+
+    return (
+        <div className="flex flex-col sm:flex-row items-start relative">
+            <motion.div 
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className={cn(
+                    "relative flex items-center gap-3 p-2 rounded-xl border transition-all",
+                    node.type === 'real' ? "bg-card border-primary" : "bg-muted/20 border-dashed",
+                    // Interactive hover states
+                    "hover:shadow-md cursor-pointer"
+                )}
+                onClick={() => toggleNode(node.id)}
+                onDoubleClick={() => onNavigate(node.turnId)}
+            >
+                {/* Node Badge */}
+                <span className="font-mono font-bold text-xs bg-muted px-1.5 rounded">{node.label}</span>
+                <span className="text-sm truncate font-medium">{node.title}</span>
+                
+                {/* Complexity Visualization Bar */}
+                {node.complexity && (
+                    <div className="absolute bottom-0 left-0 w-full h-[3px] overflow-hidden rounded-b-xl">
+                         <div className={cn("h-full", complexityColor)} 
+                              style={{ width: \`\${node.complexity * 10}%\` }} />
+                    </div>
+                )}
+            </motion.div>
+
+            {/* Recursive Children Rendering with AnimatePresence */}
+            <AnimatePresence>
+                {isExpanded && hasChildren && (
+                    <motion.div 
+                        initial={{ opacity: 0, height: 0 }} 
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="flex flex-col pl-8 border-l border-border/50 ml-4"
+                    >
+                        {node.children.map(child => (
+                            <MindMapNode 
+                                key={child.id} 
+                                node={child} 
+                                depth={depth + 1} 
+                                onNavigate={onNavigate} 
+                            />
+                        ))}
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    )
+}`
+  },
   // personal-loan-management snippets
   {
     id: 'auth-jwt',

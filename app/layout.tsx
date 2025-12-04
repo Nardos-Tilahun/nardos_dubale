@@ -341,7 +341,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                     href="https://github.com/Nardos-Tilahun/my-portfolio"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-medium underline italic font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-indigo-500 "
+                    className=" underline italic font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-indigo-500 "
                   >
                     GitHub
                   </a>

@@ -12,6 +12,32 @@ interface ProjectChallenges {
 }
 
 const allChallenges: ProjectChallenges = {
+  'goal-cracker': [
+    {
+      title: 'Streaming Mixed Content (JSON + Text)',
+      description: 'The AI agents needed to provide a conversational response ("message") AND a structured plan ("steps") simultaneously. Waiting for the full response made the UI feel slow, but standard JSON parsers crash on incomplete strings during streaming, causing the UI to flicker or fail.',
+      solution: 'I implemented a fault-tolerant streaming hook on the frontend using `best-effort-json-parser`. This allows the UI to "peek" into the incoming byte stream and render valid parts of the JSON (like the "Thinking" logs and partial "Steps") progressively as they arrive, creating a seamless, instant-feedback experience.',
+      icon: 'code'
+    },
+    {
+      title: 'Infinite Branching History',
+      description: 'Unlike a linear chat, Goal Cracker allows users to edit any previous message or "drill down" into a specific step, creating a complex tree of alternate timelines and nested goals. Managing this state in a linear SQL database while keeping the UI navigational was complex.',
+      solution: 'I designed a recursive "ChatTurn" and "TurnVersion" schema in PostgreSQL where every message links to a parent ID. On the frontend, I built a recursive "Mind Map" navigation system using React Context that rebuilds the visual tree structure from the flat array of turns fetched from the database.',
+      icon: 'git-branch' // You might need to map this string to an icon in your component
+    },
+    {
+      title: 'Multi-Agent State Management',
+      description: 'Users can switch models (e.g., from Llama to Mixtral) mid-stream or for specific turns. Keeping track of which agent generated which part of the plan without race conditions or data overwrites was difficult.',
+      solution: 'I utilized `AbortController` references mapped to specific agent/turn IDs. This ensures that if a user switches agents or stops generation, only the specific relevant network request is cancelled, and the state machine cleanly transitions to the new agent without affecting other history items.',
+      icon: 'cpu'
+    },
+    {
+      title: 'Preventing Hallucination',
+      description: 'General purpose LLMs often "hallucinate" or drift into conversational fluff when asked for strict plans, breaking the application\'s rigid data structure requirements.',
+      solution: 'I engineered a robust "System Prompt" layer that strictly enforces a specific JSON output schema. This is backed by a Pydantic validation layer on the backend that sanitizes inputs and outputs, ensuring the AI focuses purely on actionable, structured logic rather than creative writing.',
+      icon: 'shield'
+    }
+  ],
    'personal-loan-management': [
     {
       title: 'Frontend Design Collaboration',
@@ -64,6 +90,7 @@ const allChallenges: ProjectChallenges = {
       icon: 'alert-triangle' // Using a generic alert icon.
     },
   ],
+  
 };
 
 export const getChallengesByProjectId = (projectId: string): ChallengeData[] => {

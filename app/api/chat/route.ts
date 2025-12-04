@@ -94,35 +94,6 @@ const DEFAULT_ERROR_MESSAGE =
 
 // Provider implementations
 const providers: Record<string, AIProvider> = {
-  gemini: {
-    name: "Gemini",
-    getEndpoint: () =>
-      "https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent",
-    getHeaders: () => ({
-      "Content-Type": "application/json",
-    }),
-    formatRequest: (systemPrompt, message) => ({
-      contents: [
-        {
-          role: "user",
-          parts: [{ text: systemPrompt }, { text: message }],
-        },
-      ],
-      generationConfig: {
-        temperature: 0.7,
-        maxOutputTokens: 500,
-        topP: 0.95,
-        topK: 40,
-      },
-    }),
-    parseResponse: (data) => ({
-      content: ensureCompleteResponse(
-        data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || ""
-      ),
-      metadata: data as Record<string, unknown>,
-    }),
-  },
-
   groq: {
     name: "Groq",
     getEndpoint: () => "https://api.groq.com/openai/v1/chat/completions",
@@ -130,19 +101,50 @@ const providers: Record<string, AIProvider> = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`,
     }),
-    formatRequest: (systemPrompt, message) => ({
-      model: "llama3-70b-8192",
+    formatRequest: (systemPrompt, message, options) => ({
+      // UPDATED: Using the latest reliable model
+      model: options?.model || "llama-3.3-70b-versatile",
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: message },
       ],
-      temperature: 0.7,
-      max_tokens: 500,
-      top_p: 0.95,
+      temperature: options?.temperature ?? 0.7,
+      max_tokens: options?.maxTokens ?? 500,
+      top_p: options?.topP ?? 0.95,
     }),
     parseResponse: (data) => ({
       content: ensureCompleteResponse(
         data.choices?.[0]?.message?.content?.trim() || ""
+      ),
+      metadata: data as Record<string, unknown>,
+    }),
+  },
+
+  gemini: {
+    name: "Gemini",
+    getEndpoint: () =>
+      // UPDATED: Using v1beta for better model support
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent",
+    getHeaders: () => ({
+      "Content-Type": "application/json",
+    }),
+    formatRequest: (systemPrompt, message, options) => ({
+      contents: [
+        {
+          role: "user",
+          parts: [{ text: systemPrompt }, { text: message }],
+        },
+      ],
+      generationConfig: {
+        temperature: options?.temperature ?? 0.7,
+        maxOutputTokens: options?.maxTokens ?? 500,
+        topP: options?.topP ?? 0.95,
+        topK: options?.topK ?? 40,
+      },
+    }),
+    parseResponse: (data) => ({
+      content: ensureCompleteResponse(
+        data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || ""
       ),
       metadata: data as Record<string, unknown>,
     }),
@@ -154,16 +156,19 @@ const providers: Record<string, AIProvider> = {
     getHeaders: (apiKey) => ({
       "Content-Type": "application/json",
       Authorization: `Bearer ${apiKey}`,
+      "HTTP-Referer": "https://portfolio.com", // Optional but good practice
+      "X-Title": "Portfolio AI",
     }),
-    formatRequest: (systemPrompt, message) => ({
-      model: "deepseek/deepseek-r1:free",
+    formatRequest: (systemPrompt, message, options) => ({
+      // UPDATED: Using a more reliable free model than DeepSeek R1 free which is often down
+      model: options?.model || "meta-llama/llama-3.3-70b-instruct:free",
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: message },
       ],
-      temperature: 0.7,
-      max_tokens: 500,
-      top_p: 0.95,
+      temperature: options?.temperature ?? 0.7,
+      max_tokens: options?.maxTokens ?? 500,
+      top_p: options?.topP ?? 0.95,
     }),
     parseResponse: (data) => ({
       content: ensureCompleteResponse(
@@ -175,7 +180,8 @@ const providers: Record<string, AIProvider> = {
 };
 
 // Define the fallback order for providers
-const fallbackOrder: string[] = ["groq", "openrouter", "gemini"];
+// Groq first (fastest/best free), then Gemini (reliable google), then OpenRouter (aggregator)
+const fallbackOrder: string[] = ["groq", "gemini", "openrouter"];
 
 // Function to get secure configuration for all providers
 function getAllConfigs(): ConfigResult {
@@ -232,9 +238,9 @@ function getAllConfigs(): ConfigResult {
       // Get model configuration for the provider
       let model: string | undefined;
       if (providerName === "openrouter") {
-        model = process.env.OPENROUTER_MODEL || "deepseek/deepseek-chat";
+        model = process.env.OPENROUTER_MODEL || "meta-llama/llama-3.3-70b-instruct:free";
       } else if (providerName === "groq") {
-        model = process.env.GROQ_MODEL || "llama3-70b-8192";
+        model = process.env.GROQ_MODEL || "llama-3.3-70b-versatile";
       } else {
         const modelEnvVar = `${providerName.toUpperCase()}_MODEL`;
         model = process.env[modelEnvVar] || undefined;
@@ -295,37 +301,44 @@ async function callProviderAPI(
 
   console.log(`Attempting to call ${providerName} API at: ${url}`);
 
-  const response = await fetch(url, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(requestBody),
-  });
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(requestBody),
+    });
 
-  const data = (await response.json()) as ApiResponseData;
+    const data = (await response.json()) as ApiResponseData;
 
-  if (!response.ok) {
-    const errorMessage = data.error?.message || response.statusText;
-    console.error(`${providerName} API error:`, errorMessage);
-    throw new Error(`${providerName} API request failed: ${errorMessage}`);
+    if (!response.ok) {
+      const errorMessage = data.error?.message || response.statusText || "Unknown API Error";
+      console.error(`${providerName} API error:`, errorMessage);
+      throw new Error(`${providerName} API request failed: ${errorMessage}`);
+    }
+
+    const parsedResponse = provider.parseResponse(data);
+
+    // Check if the response matches our default error message or is empty
+    if (
+      !parsedResponse.content ||
+      parsedResponse.content === DEFAULT_ERROR_MESSAGE
+    ) {
+      throw new Error(
+        `${providerName} returned an empty or default error response`
+      );
+    }
+
+    return {
+      content: parsedResponse.content,
+      metadata: parsedResponse.metadata,
+      provider: providerName,
+    };
+  } catch (error) {
+    // Catch fetch network errors (like "fetch failed") and rethrow them clearly so fallback logic catches them
+    const errMsg = error instanceof Error ? error.message : String(error);
+    console.error(`Network/Processing error with ${providerName}: ${errMsg}`);
+    throw new Error(`${providerName} failed: ${errMsg}`);
   }
-
-  const parsedResponse = provider.parseResponse(data);
-
-  // Check if the response matches our default error message or is empty
-  if (
-    !parsedResponse.content ||
-    parsedResponse.content === DEFAULT_ERROR_MESSAGE
-  ) {
-    throw new Error(
-      `${providerName} returned an empty or default error response`
-    );
-  }
-
-  return {
-    content: parsedResponse.content,
-    metadata: parsedResponse.metadata,
-    provider: providerName,
-  };
 }
 
 // Message interface for request processing
@@ -367,14 +380,14 @@ export async function POST(req: Request) {
       );
     }
 
-    // Get preferred provider from environment
-    const preferredProvider = process.env.AI_PROVIDER || "openrouter";
+    // Get preferred provider from environment or default to groq
+    const preferredProvider = process.env.AI_PROVIDER || "groq";
 
     // Get configurations for all providers
     const { configs, errors } = getAllConfigs();
 
     console.log("Available providers:", Object.keys(configs));
-    console.log("Provider errors:", errors);
+    if (Object.keys(errors).length > 0) console.log("Provider configuration warnings:", errors);
 
     // Create a custom fallback order starting with the preferred provider
     let customFallbackOrder = [preferredProvider];
@@ -384,10 +397,13 @@ export async function POST(req: Request) {
       }
     });
 
-    // Filter to only include providers we have configs for
+    // Filter to only include providers we have valid configs for
     customFallbackOrder = customFallbackOrder.filter(
       (provider) => configs[provider]
     );
+    
+    // Remove duplicates
+    customFallbackOrder = [...new Set(customFallbackOrder)];
 
     console.log("Fallback order:", customFallbackOrder);
 
