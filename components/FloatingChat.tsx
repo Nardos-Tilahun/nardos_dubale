@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from "react"
 import NextImage from "next/image"
 import { Button } from "@/components/ui/button"
 import { 
+  Send, 
   MessageSquare, 
   X, 
   Trash2, 
@@ -241,7 +242,6 @@ export default function FloatingChat() {
             initial="hidden"
             animate="visible"
             exit="exit"
-            // INCREASED SIZE for better readability on desktop
             className="pointer-events-auto w-[90vw] sm:w-[400px] h-[650px] max-h-[85vh] flex flex-col bg-[#18181b] border border-white/10 rounded-2xl shadow-2xl overflow-hidden ring-1 ring-white/5"
           >
             {/* Header */}
@@ -253,7 +253,7 @@ export default function FloatingChat() {
                 </div>
                 <div className="flex flex-col">
                   <span className="text-sm font-semibold text-white">Interactive Agent</span>
-                  <span className="text-[11px] text-zinc-400">Please feel free to ask anything about Nardos</span>
+                  <span className="text-[11px] text-zinc-400">Powered by Groq Llama 3</span>
                 </div>
               </div>
               <div className="flex items-center gap-1">
@@ -289,7 +289,7 @@ export default function FloatingChat() {
                   </motion.h2>
                   
                   <motion.p variants={itemVariants} className="text-sm text-zinc-400 text-center max-w-[280px] leading-relaxed mb-8">
-                    I am Nardos's AI Architect. I can analyze code, explain projects, or schedule a meeting.
+                    I am Nardos&apos;s AI Architect. I can analyze code, explain projects, or schedule a meeting.
                   </motion.p>
 
                   <motion.div variants={containerVariants} className="grid grid-cols-1 gap-3 w-full max-w-[340px]">
@@ -361,7 +361,7 @@ export default function FloatingChat() {
                                   a: ({ href, children }) => <a href={href} target="_blank" className="text-emerald-400 underline decoration-emerald-500/30 underline-offset-4 hover:decoration-emerald-400 hover:text-emerald-300 transition-colors font-semibold">{children}</a>,
                                   ul: ({ children }) => <ul className="list-disc pl-5 my-3 space-y-2 marker:text-zinc-500">{children}</ul>,
                                   ol: ({ children }) => <ol className="list-decimal pl-5 my-3 space-y-2 marker:text-zinc-500">{children}</ol>,
-                                  p: ({ children }) => <p className="mb-3 last:mb-0 leading-7 text-sm">{children}</p> // Increased line-height
+                                  p: ({ children }) => <p className="mb-3 last:mb-0 leading-7 text-sm">{children}</p>
                                 }}
                              >
                                {m.content}
