@@ -5,7 +5,6 @@ import { useState, useRef, useEffect } from "react"
 import NextImage from "next/image"
 import { Button } from "@/components/ui/button"
 import { 
-  Send, 
   MessageSquare, 
   X, 
   Trash2, 
